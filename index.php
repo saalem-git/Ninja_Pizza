@@ -1,0 +1,58 @@
+<?php 
+	 include ('db.php');
+
+	// write query for all pizzas
+	$sql = 'SELECT title, ingredients, id FROM pizza';
+
+	// get the result set (set of rows)
+	$result = mysqli_query($conn, $sql);
+
+	// fetch the resulting rows as an array
+	$pizza = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+	// free the $result from memory (good practise)
+	mysqli_free_result($result);
+
+	// close connection
+	mysqli_close($conn);
+
+	//print_r(explode(',', $pizzas[0]['ingredients']));
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+	<?php include('templates/header.php'); ?>
+
+	<h4 class="center grey-text">Our Pizzas List</h4>
+
+	<div class="container">
+		<div class="row">
+
+			<?php foreach($pizza as $pizzas){ ?>
+
+				<div class="col s6 md3">
+					<div class="card z-depth-0">
+					<img src="pizza.svg"class="pizza">
+						<div class="card-content center">
+							<h6><?php echo htmlspecialchars($pizzas['title']); ?></h6>
+							<ul class="grey-text">
+								<?php foreach(explode(',', $pizzas['ingredients']) as $ing){ ?>
+									<li><?php echo htmlspecialchars($ing); ?></li>
+								<?php } ?>
+							</ul>
+						</div>
+						<div class="card-action right-align">
+							<a class="brand-text" href="details.php?id=<?php echo $pizzas['id'] ?>">More Info</a>
+						</div>
+					</div>
+				</div>
+
+			<?php } ?>
+
+		</div>
+	</div>
+
+	<?php include('templates/footer.php'); ?>
+
+</html>
